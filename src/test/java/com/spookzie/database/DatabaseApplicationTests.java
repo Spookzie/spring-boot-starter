@@ -10,5 +10,4 @@ class DatabaseApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
