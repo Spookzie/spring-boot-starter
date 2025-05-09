@@ -8,9 +8,10 @@ import java.util.Optional;
 
 public interface BookDao
 {
-    void Create(Book book);
+    void Create(Book book); // C
 
-    Optional<Book> FindOne(String isbn);
+    Optional<Book> FindOne(String isbn);    // R
+    List<Book> Find();  // R
 
-    List<Book> Find();
+    void Update(String isbn, Book book);    // U
 }

@@ -12,4 +12,6 @@ public interface AuthorDao
 
     Optional<Author> FindOne(long author_id);   // R
     List<Author> Find();                        // R
+
+    void Update(Long author_id, Author author); // U
 }

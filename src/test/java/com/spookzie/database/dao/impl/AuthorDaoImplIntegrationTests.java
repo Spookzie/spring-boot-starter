@@ -30,7 +30,7 @@ public class AuthorDaoImplIntegrationTests
     }
 
 
-    //  Tests   //
+    // Read One Test
     @Test
     public void TestThatAuthorCanBeCreatedAndRecalled()
     {
@@ -44,6 +44,8 @@ public class AuthorDaoImplIntegrationTests
         assertThat(result.get()).isEqualTo(author); // Confirming that it matches
     }
 
+
+    // Read Many Test
     @Test
     public void TestThatMultipleAuthorsCanBeCreatedAndRecalled()
     {
@@ -60,5 +62,23 @@ public class AuthorDaoImplIntegrationTests
         assertThat(result)
                 .hasSize(3)
                 .containsExactly(authorA, authorB, authorC);
+    }
+
+
+    // Update Test
+    @Test
+    public void TestThatAuthorCanBeUpdated()
+    {
+        // Creating author
+        Author authorA = TestDataUtil.CreateTestAuthorA();
+        this.authorDao.Create(authorA);
+
+        authorA.setName("UPDATED"); // Changing author's name
+        this.authorDao.Update(authorA.getId(), authorA);    // Updating the author
+
+        // Finding and checking the author
+        Optional<Author> result = this.authorDao.FindOne(authorA.getId());
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(authorA);
     }
 }

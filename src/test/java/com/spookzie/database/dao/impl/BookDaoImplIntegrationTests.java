@@ -34,7 +34,7 @@ public class BookDaoImplIntegrationTests
     }
 
 
-    //  Tests   //
+    // Read One Test
     @Test
     public void TestThatBookCanBeCreatedAndRecalled()
     {
@@ -53,6 +53,8 @@ public class BookDaoImplIntegrationTests
         assertThat(result.get()).isEqualTo(book);   // Confirming match
     }
 
+
+    // Read Many Test
     @Test
     public void TestThatMultipleBooksCanBeCreatedAndRecalled()
     {
@@ -82,5 +84,28 @@ public class BookDaoImplIntegrationTests
         assertThat(result)
                 .hasSize(3)
                 .containsExactly(bookA, bookB, bookC);
+    }
+
+
+    // Update Test
+    @Test
+    public void TestThatBookCanBeUpdated()
+    {
+        // Creating author
+        Author authorA = TestDataUtil.CreateTestAuthorA();
+        this.authorDao.Create(authorA);
+
+        // Creating book
+        Book bookA = TestDataUtil.CreateTestBookA();
+        bookA.setAuthorId(authorA.getId());
+        this.bookDao.Create(bookA);
+
+        bookA.setTitle("UPDATED");    // Changing book title
+        this.bookDao.Update(bookA.getIsbn(), bookA);    // Updating the book
+
+        // Finding & checking the updated book
+        Optional<Book> result = this.bookDao.FindOne(bookA.getIsbn());
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(bookA);
     }
 }

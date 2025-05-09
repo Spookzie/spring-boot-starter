@@ -2,6 +2,7 @@ package com.spookzie.database.dao.impl;
 
 import com.spookzie.database.TestDataUtil;
 import com.spookzie.database.domain.Book;
+import org.apache.tomcat.util.http.fileupload.MultipartStream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -60,6 +61,19 @@ public class BookDaoImplTests
         verify(this.jdbcTemplate).query(
                 eq("SELECT isbn, title, author_id FROM books"),
                 ArgumentMatchers.<BookDaoImpl.BookRowMapper>any()
+        );
+    }
+
+    // Update Test
+    @Test
+    public void TestThatUpdateGeneratesTheCorrectSql()
+    {
+        Book book = TestDataUtil.CreateTestBookA();
+        this.bookDao.Update(book.getIsbn(), book);
+
+        verify(this.jdbcTemplate).update(
+                "UPDATE books SET isbn = ?, title = ?, author_id = ? WHERE isbn = ?",
+                "978-1-2345-6789-0", "The Shadow in the Attic", 1L, "978-1-2345-6789-0"
         );
     }
 }

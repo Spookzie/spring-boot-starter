@@ -59,6 +59,20 @@ public class AuthorDaoImpl implements AuthorDao
     }
     //---------------------------------
 
+
+    // Update Operation (U)
+    //---------------------------------
+    @Override
+    public void Update(Long author_id, Author author)
+    {
+        this.jdbcTemplate.update(
+                "UPDATE authors SET id = ?, name = ?, age = ? WHERE id = ?",
+                author.getId(), author.getName(), author.getAge(), author_id
+        );
+    }
+    //---------------------------------
+
+
     // Converting row from ResultSet into Author object
     // Converting DB rows into Java objects
     public static class AuthorRowMapper implements RowMapper<Author>

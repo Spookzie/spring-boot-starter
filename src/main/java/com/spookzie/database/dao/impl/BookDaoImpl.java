@@ -60,6 +60,19 @@ public class BookDaoImpl implements BookDao
     //---------------------------------
 
 
+    // Update Operation (U)
+    //---------------------------------
+    @Override
+    public void Update(String isbn, Book book)
+    {
+        this.jdbcTemplate.update(
+                "UPDATE books SET isbn = ?, title = ?, author_id = ? WHERE isbn = ?",
+                book.getIsbn(), book.getTitle(), book.getAuthorId(), isbn
+        );
+    }
+    //---------------------------------
+
+
     // Converting row from ResultSet into Author object
     // Converting DB rows into Java objects
     public static class BookRowMapper implements RowMapper<Book>
