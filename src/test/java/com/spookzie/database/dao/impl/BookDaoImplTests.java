@@ -76,4 +76,17 @@ public class BookDaoImplTests
                 "978-1-2345-6789-0", "The Shadow in the Attic", 1L, "978-1-2345-6789-0"
         );
     }
+
+
+    // Delete Test
+    @Test
+    public void TestThatDeleteGeneratesTheCorrectSql()
+    {
+        this.bookDao.Delete("978-1-2345-6789-0");
+
+        verify(this.jdbcTemplate).update(
+                "DELETE FROM books WHERE isbn = ?",
+                "978-1-2345-6789-0"
+        );
+    }
 }

@@ -11,7 +11,9 @@ public interface BookDao
     void Create(Book book); // C
 
     Optional<Book> FindOne(String isbn);    // R
-    List<Book> Find();  // R
+    List<Book> Find();                      // R
 
     void Update(String isbn, Book book);    // U
+
+    void Delete(String isbn);   // D
 }

@@ -26,6 +26,7 @@ public class BookDaoImplIntegrationTests
     private final BookDaoImpl bookDao;    // Implementation that is being tested
 
 
+    // Constructor
     @Autowired
     public BookDaoImplIntegrationTests(BookDaoImpl under_test, AuthorDao author_dao)
     {
@@ -107,5 +108,27 @@ public class BookDaoImplIntegrationTests
         Optional<Book> result = this.bookDao.FindOne(bookA.getIsbn());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(bookA);
+    }
+
+
+    // Delete Test
+    @Test
+    public void TestThatBookCanBeDeleted()
+    {
+        // Create author
+        Author authorA = TestDataUtil.CreateTestAuthorA();
+        this.authorDao.Create(authorA);
+
+        // Create book
+        Book bookA = TestDataUtil.CreateTestBookA();
+        bookA.setAuthorId(authorA.getId());
+        this.bookDao.Create(bookA);
+
+        // Delete book
+        this.bookDao.Delete(bookA.getIsbn());
+
+        // Check if book is deleted
+        Optional<Book> result = this.bookDao.FindOne(bookA.getIsbn());
+        assertThat(result).isEmpty();
     }
 }

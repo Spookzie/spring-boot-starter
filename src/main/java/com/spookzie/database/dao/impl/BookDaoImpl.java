@@ -73,6 +73,19 @@ public class BookDaoImpl implements BookDao
     //---------------------------------
 
 
+    // Delete Operation (D)
+    //---------------------------------
+    @Override
+    public void Delete(String isbn)
+    {
+        this.jdbcTemplate.update(
+                "DELETE FROM books WHERE isbn = ?",
+                isbn
+        );
+    }
+    //---------------------------------
+
+
     // Converting row from ResultSet into Author object
     // Converting DB rows into Java objects
     public static class BookRowMapper implements RowMapper<Book>

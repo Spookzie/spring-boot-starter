@@ -23,6 +23,7 @@ public class AuthorDaoImplIntegrationTests
     private final AuthorDaoImpl authorDao;  // Implementation that is being tested
 
 
+    // Constructor
     @Autowired
     public AuthorDaoImplIntegrationTests(AuthorDaoImpl under_test)
     {
@@ -80,5 +81,22 @@ public class AuthorDaoImplIntegrationTests
         Optional<Author> result = this.authorDao.FindOne(authorA.getId());
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(authorA);
+    }
+
+
+    // Delete Test
+    @Test
+    public void TestThatAuthorCanBeDeleted()
+    {
+        // Creating author
+        Author authorA = TestDataUtil.CreateTestAuthorA();
+        this.authorDao.Create(authorA);
+
+        // Deleting author
+        this.authorDao.Delete(authorA.getId());
+
+        // Checking if author is deleted (result is deleted)
+        Optional<Author> result = this.authorDao.FindOne(authorA.getId());
+        assertThat(result).isEmpty();
     }
 }

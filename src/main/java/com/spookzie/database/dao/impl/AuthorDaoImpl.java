@@ -73,6 +73,19 @@ public class AuthorDaoImpl implements AuthorDao
     //---------------------------------
 
 
+    // Delete Operation (D)
+    //---------------------------------
+    @Override
+    public void Delete(long id)
+    {
+        this.jdbcTemplate.update(
+                "DELETE FROM authors WHERE id = ?",
+                id
+        );
+    }
+    //---------------------------------
+
+
     // Converting row from ResultSet into Author object
     // Converting DB rows into Java objects
     public static class AuthorRowMapper implements RowMapper<Author>

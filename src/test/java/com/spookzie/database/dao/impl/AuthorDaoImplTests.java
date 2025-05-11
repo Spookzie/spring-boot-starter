@@ -77,4 +77,17 @@ public class AuthorDaoImplTests
                 1L, "Abigail Rose", 80, 1L
         );
     }
+
+
+    // Delete Test
+    @Test
+    public void TestThatDeleteGeneratesTheCorrectSql()
+    {
+        this.authorDao.Delete(1L);
+
+        verify(this.jdbcTemplate).update(
+                "DELETE FROM authors WHERE id = ?",
+                1L
+        );
+    }
 }
