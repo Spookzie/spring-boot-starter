@@ -13,7 +13,7 @@ public final class TestDataUtil
     public static Author CreateTestAuthorA()
     {
         return Author.builder()
-                .id(1L)
+                .id(null)   // No need to pass in from us, will be generated automatically by @GeneratedValue
                 .name("Abigail Rose")
                 .age(80)
                 .build();
@@ -22,7 +22,7 @@ public final class TestDataUtil
     public static Author CreateTestAuthorB()
     {
         return Author.builder()
-                .id(2L)
+                .id(null)
                 .name("Mark Lawrence")
                 .age(47)
                 .build();
@@ -31,7 +31,7 @@ public final class TestDataUtil
     public static Author CreateTestAuthorC()
     {
         return Author.builder()
-                .id(3L)
+                .id(null)
                 .name("Haruki Murakami")
                 .age(65)
                 .build();
@@ -41,30 +41,30 @@ public final class TestDataUtil
 
     // Books
     //-------------------------
-    public static Book CreateTestBookA()
+    public static Book CreateTestBookA(final Author author)
     {
         return Book.builder()
                 .isbn("978-1-2345-6789-0")
                 .title("The Shadow in the Attic")
-                .authorId(1L)
+                .author(author)
                 .build();
     }
 
-    public static Book CreateTestBookB()
+    public static Book CreateTestBookB(final Author author)
     {
         return Book.builder()
                 .isbn("123-4-5678-9012-3")
                 .title("Prince of Thorns")
-                .authorId(2L)
+                .author(author)
                 .build();
     }
 
-    public static Book CreateTestBookC()
+    public static Book CreateTestBookC(final Author author)
     {
         return Book.builder()
                 .isbn("456-7-8901-2345-6")
                 .title("Norwegian Wood")
-                .authorId(3L)
+                .author(author)
                 .build();
     }
     //-------------------------
