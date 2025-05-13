@@ -35,8 +35,7 @@ public class AuthorRepositoryIntegerationTests
     public void TestThatAuthorCanBeCreatedAndRecalled()
     {
         // Creating author
-        Author author = TestDataUtil.CreateTestAuthorA();
-        this.authorRepo.save(author);  // Inserting into DB
+        Author author = this.authorRepo.save(TestDataUtil.CreateTestAuthorA());  // Inserting into DB
 
         // Recalling author
         Optional<Author> result = this.authorRepo.findById(author.getId());   // Fetching from DB
@@ -45,24 +44,21 @@ public class AuthorRepositoryIntegerationTests
     }
 
 
-//    // Read Many Test
-//    @Test
-//    public void TestThatMultipleAuthorsCanBeCreatedAndRecalled()
-//    {
-//        // Creating authors
-//        Author authorA = TestDataUtil.CreateTestAuthorA();
-//        this.authorRepo.Create(authorA);
-//        Author authorB = TestDataUtil.CreateTestAuthorB();
-//        this.authorRepo.Create(authorB);
-//        Author authorC = TestDataUtil.CreateTestAuthorC();
-//        this.authorRepo.Create(authorC);
-//
-//        // Recalling Authors
-//        List<Author> result = this.authorRepo.Find();
-//        assertThat(result)
-//                .hasSize(3)
-//                .containsExactly(authorA, authorB, authorC);
-//    }
+    // Read Many Test
+    @Test
+    public void TestThatMultipleAuthorsCanBeCreatedAndRecalled()
+    {
+        // Creating authors
+        Author authorA = this.authorRepo.save(TestDataUtil.CreateTestAuthorA());
+        Author authorB = this.authorRepo.save(TestDataUtil.CreateTestAuthorB());
+        Author authorC = this.authorRepo.save(TestDataUtil.CreateTestAuthorC());
+
+        // Recalling Authors
+        Iterable<Author> result = this.authorRepo.findAll();
+        assertThat(result)
+                .hasSize(3)
+                .containsExactly(authorA, authorB, authorC);
+    }
 //
 //
 //    // Update Test

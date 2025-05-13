@@ -13,7 +13,6 @@ public final class TestDataUtil
     public static Author CreateTestAuthorA()
     {
         return Author.builder()
-                .id(null)   // No need to pass in from us, will be generated automatically by @GeneratedValue
                 .name("Abigail Rose")
                 .age(80)
                 .build();
@@ -22,7 +21,6 @@ public final class TestDataUtil
     public static Author CreateTestAuthorB()
     {
         return Author.builder()
-                .id(null)
                 .name("Mark Lawrence")
                 .age(47)
                 .build();
@@ -31,7 +29,6 @@ public final class TestDataUtil
     public static Author CreateTestAuthorC()
     {
         return Author.builder()
-                .id(null)
                 .name("Haruki Murakami")
                 .age(65)
                 .build();

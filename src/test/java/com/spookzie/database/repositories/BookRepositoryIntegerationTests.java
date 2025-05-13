@@ -39,46 +39,34 @@ public class BookRepositoryIntegerationTests
         Author author = TestDataUtil.CreateTestAuthorA();
 
         // Creating Book
-        Book book = TestDataUtil.CreateTestBookA(author);
-        this.bookRepo.save(book);    // Inserting
+        Book book = this.bookRepo.save(TestDataUtil.CreateTestBookA(author));    // Inserting
 
         // Recalling book
         Optional<Book> result = this.bookRepo.findById(book.getIsbn());    // Fetching
         assertThat(result).isPresent(); // Confirming existence
+        assertThat(result.get()).isEqualTo(book);
     }
 
 
-//    // Read Many Test
-//    @Test
-//    public void TestThatMultipleBooksCanBeCreatedAndRecalled()
-//    {
-//        // Creating Authors
-//        Author authorA = TestDataUtil.CreateTestAuthorA();
-//        this.authorRepo.Create(authorA);
-//        Author authorB = TestDataUtil.CreateTestAuthorB();
-//        this.authorRepo.Create(authorB);
-//        Author authorC = TestDataUtil.CreateTestAuthorC();
-//        this.authorRepo.Create(authorC);
-//
-//        // Creating Books
-//        Book bookA = TestDataUtil.CreateTestBookA();
-//        bookA.setAuthorId(authorA.getId());
-//        this.bookRepo.Create(bookA);
-//
-//        Book bookB = TestDataUtil.CreateTestBookB();
-//        bookB.setAuthorId(authorB.getId());
-//        this.bookRepo.Create(bookB);
-//
-//        Book bookC = TestDataUtil.CreateTestBookC();
-//        bookC.setAuthorId(authorC.getId());
-//        this.bookRepo.Create(bookC);
-//
-//        // Recalling Books
-//        List<Book> result = this.bookRepo.Find();
-//        assertThat(result)
-//                .hasSize(3)
-//                .containsExactly(bookA, bookB, bookC);
-//    }
+    // Read Many Test
+    @Test
+    public void TestThatMultipleBooksCanBeCreatedAndRecalled()
+    {
+        // Creating author
+        Author author = TestDataUtil.CreateTestAuthorA();
+
+        // Creating Books
+        Book bookA = this.bookRepo.save(TestDataUtil.CreateTestBookA(author));
+        Book bookB = this.bookRepo.save(TestDataUtil.CreateTestBookB(author));
+        Book bookC = this.bookRepo.save(TestDataUtil.CreateTestBookC(author));
+
+
+        // Recalling Books
+        Iterable<Book> result = this.bookRepo.findAll();
+        assertThat(result)
+                .hasSize(3)
+                .containsExactly(bookA, bookB, bookC);
+    }
 //
 //
 //    // Update Test
