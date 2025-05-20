@@ -67,49 +67,39 @@ public class BookRepositoryIntegerationTests
                 .hasSize(3)
                 .containsExactly(bookA, bookB, bookC);
     }
-//
-//
-//    // Update Test
-//    @Test
-//    public void TestThatBookCanBeUpdated()
-//    {
-//        // Creating author
-//        Author authorA = TestDataUtil.CreateTestAuthorA();
-//        this.authorRepo.Create(authorA);
-//
-//        // Creating book
-//        Book bookA = TestDataUtil.CreateTestBookA();
-//        bookA.setAuthorId(authorA.getId());
-//        this.bookRepo.Create(bookA);
-//
-//        bookA.setTitle("UPDATED");    // Changing book title
-//        this.bookRepo.Update(bookA.getIsbn(), bookA);    // Updating the book
-//
-//        // Finding & checking the updated book
-//        Optional<Book> result = this.bookRepo.FindOne(bookA.getIsbn());
-//        assertThat(result).isPresent();
-//        assertThat(result.get()).isEqualTo(bookA);
-//    }
-//
-//
-//    // Delete Test
-//    @Test
-//    public void TestThatBookCanBeDeleted()
-//    {
-//        // Create author
-//        Author authorA = TestDataUtil.CreateTestAuthorA();
-//        this.authorRepo.Create(authorA);
-//
-//        // Create book
-//        Book bookA = TestDataUtil.CreateTestBookA();
-//        bookA.setAuthorId(authorA.getId());
-//        this.bookRepo.Create(bookA);
-//
-//        // Delete book
-//        this.bookRepo.Delete(bookA.getIsbn());
-//
-//        // Check if book is deleted
-//        Optional<Book> result = this.bookRepo.FindOne(bookA.getIsbn());
-//        assertThat(result).isEmpty();
-//    }
+
+
+    // Update Test
+    @Test
+    public void TestThatBookCanBeUpdated()
+    {
+        // Creating author & book
+        Author authorA = TestDataUtil.CreateTestAuthorA();
+        Book bookA = this.bookRepo.save(TestDataUtil.CreateTestBookA(authorA));
+
+        bookA.setTitle("UPDATED");    // Changing book title
+        this.bookRepo.save(bookA);    // Updating the book
+
+        // Finding & checking the updated book
+        Optional<Book> result = this.bookRepo.findById(bookA.getIsbn());
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(bookA);
+    }
+
+
+    // Delete Test
+    @Test
+    public void TestThatBookCanBeDeleted()
+    {
+        // Create author & book
+        Author authorA = TestDataUtil.CreateTestAuthorA();
+        Book bookA = this.bookRepo.save(TestDataUtil.CreateTestBookA(authorA));
+
+        // Delete book
+        this.bookRepo.deleteById(bookA.getIsbn());
+
+        // Check if book is deleted
+        Optional<Book> result = this.bookRepo.findById(bookA.getIsbn());
+        assertThat(result).isEmpty();
+    }
 }

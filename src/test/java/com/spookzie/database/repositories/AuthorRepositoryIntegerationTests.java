@@ -59,39 +59,37 @@ public class AuthorRepositoryIntegerationTests
                 .hasSize(3)
                 .containsExactly(authorA, authorB, authorC);
     }
-//
-//
-//    // Update Test
-//    @Test
-//    public void TestThatAuthorCanBeUpdated()
-//    {
-//        // Creating author
-//        Author authorA = TestDataUtil.CreateTestAuthorA();
-//        this.authorRepo.Create(authorA);
-//
-//        authorA.setName("UPDATED"); // Changing author's name
-//        this.authorRepo.Update(authorA.getId(), authorA);    // Updating the author
-//
-//        // Finding and checking the author
-//        Optional<Author> result = this.authorRepo.FindOne(authorA.getId());
-//        assertThat(result).isPresent();
-//        assertThat(result.get()).isEqualTo(authorA);
-//    }
-//
-//
-//    // Delete Test
-//    @Test
-//    public void TestThatAuthorCanBeDeleted()
-//    {
-//        // Creating author
-//        Author authorA = TestDataUtil.CreateTestAuthorA();
-//        this.authorRepo.Create(authorA);
-//
-//        // Deleting author
-//        this.authorRepo.Delete(authorA.getId());
-//
-//        // Checking if author is deleted (result is deleted)
-//        Optional<Author> result = this.authorRepo.FindOne(authorA.getId());
-//        assertThat(result).isEmpty();
-//    }
+
+
+    // Update Test
+    @Test
+    public void TestThatAuthorCanBeUpdated()
+    {
+        // Creating author
+        Author authorA = this.authorRepo.save(TestDataUtil.CreateTestAuthorA());
+
+        authorA.setName("UPDATED"); // Changing author's name
+        this.authorRepo.save(authorA);    // Updating the author
+
+        // Finding and checking the author
+        Optional<Author> result = this.authorRepo.findById(authorA.getId());
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(authorA);
+    }
+
+
+    // Delete Test
+    @Test
+    public void TestThatAuthorCanBeDeleted()
+    {
+        // Creating author
+        Author authorA = this.authorRepo.save(TestDataUtil.CreateTestAuthorA());
+
+        // Deleting author
+        this.authorRepo.deleteById(authorA.getId());
+
+        // Checking if author is deleted (result is deleted)
+        Optional<Author> result = this.authorRepo.findById(authorA.getId());
+        assertThat(result).isEmpty();
+    }
 }
