@@ -18,14 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class BookRepositoryIntegerationTests
+public class BookRepositoryIntegrationTests
 {
     private final BookRepository bookRepo;    // Implementation that is being tested
 
 
     // Constructor
     @Autowired
-    public BookRepositoryIntegerationTests(BookRepository under_test)
+    public BookRepositoryIntegrationTests(BookRepository under_test)
     {
         this.bookRepo = under_test;
     }
@@ -33,13 +33,13 @@ public class BookRepositoryIntegerationTests
 
     // Read One Test
     @Test
-    public void TestThatBookCanBeCreatedAndRecalled()
+    public void testThatBookCanBeCreatedAndRecalled()
     {
         // Creating Author (for author_id in book)
-        Author author = TestDataUtil.CreateTestAuthorA();
+        Author author = TestDataUtil.createTestAuthorA();
 
         // Creating Book
-        Book book = this.bookRepo.save(TestDataUtil.CreateTestBookA(author));    // Inserting
+        Book book = this.bookRepo.save(TestDataUtil.createTestBookA(author));    // Inserting
 
         // Recalling book
         Optional<Book> result = this.bookRepo.findById(book.getIsbn());    // Fetching
@@ -50,15 +50,15 @@ public class BookRepositoryIntegerationTests
 
     // Read Many Test
     @Test
-    public void TestThatMultipleBooksCanBeCreatedAndRecalled()
+    public void testThatMultipleBooksCanBeCreatedAndRecalled()
     {
         // Creating author
-        Author author = TestDataUtil.CreateTestAuthorA();
+        Author author = TestDataUtil.createTestAuthorA();
 
         // Creating Books
-        Book bookA = this.bookRepo.save(TestDataUtil.CreateTestBookA(author));
-        Book bookB = this.bookRepo.save(TestDataUtil.CreateTestBookB(author));
-        Book bookC = this.bookRepo.save(TestDataUtil.CreateTestBookC(author));
+        Book bookA = this.bookRepo.save(TestDataUtil.createTestBookA(author));
+        Book bookB = this.bookRepo.save(TestDataUtil.createTestBookB(author));
+        Book bookC = this.bookRepo.save(TestDataUtil.createTestBookC(author));
 
 
         // Recalling Books
@@ -71,11 +71,11 @@ public class BookRepositoryIntegerationTests
 
     // Update Test
     @Test
-    public void TestThatBookCanBeUpdated()
+    public void testThatBookCanBeUpdated()
     {
         // Creating author & book
-        Author authorA = TestDataUtil.CreateTestAuthorA();
-        Book bookA = this.bookRepo.save(TestDataUtil.CreateTestBookA(authorA));
+        Author authorA = TestDataUtil.createTestAuthorA();
+        Book bookA = this.bookRepo.save(TestDataUtil.createTestBookA(authorA));
 
         bookA.setTitle("UPDATED");    // Changing book title
         this.bookRepo.save(bookA);    // Updating the book
@@ -89,11 +89,11 @@ public class BookRepositoryIntegerationTests
 
     // Delete Test
     @Test
-    public void TestThatBookCanBeDeleted()
+    public void testThatBookCanBeDeleted()
     {
         // Create author & book
-        Author authorA = TestDataUtil.CreateTestAuthorA();
-        Book bookA = this.bookRepo.save(TestDataUtil.CreateTestBookA(authorA));
+        Author authorA = TestDataUtil.createTestAuthorA();
+        Book bookA = this.bookRepo.save(TestDataUtil.createTestBookA(authorA));
 
         // Delete book
         this.bookRepo.deleteById(bookA.getIsbn());

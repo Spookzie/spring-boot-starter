@@ -10,7 +10,7 @@ public final class TestDataUtil
 
     // Authors
     //--------------------------
-    public static Author CreateTestAuthorA()
+    public static Author createTestAuthorA()
     {
         return Author.builder()
                 .name("Abigail Rose")
@@ -18,7 +18,7 @@ public final class TestDataUtil
                 .build();
     }
 
-    public static Author CreateTestAuthorB()
+    public static Author createTestAuthorB()
     {
         return Author.builder()
                 .name("Mark Lawrence")
@@ -26,7 +26,7 @@ public final class TestDataUtil
                 .build();
     }
 
-    public static Author CreateTestAuthorC()
+    public static Author createTestAuthorC()
     {
         return Author.builder()
                 .name("Haruki Murakami")
@@ -38,7 +38,7 @@ public final class TestDataUtil
 
     // Books
     //-------------------------
-    public static Book CreateTestBookA(final Author author)
+    public static Book createTestBookA(final Author author)
     {
         return Book.builder()
                 .isbn("978-1-2345-6789-0")
@@ -47,7 +47,7 @@ public final class TestDataUtil
                 .build();
     }
 
-    public static Book CreateTestBookB(final Author author)
+    public static Book createTestBookB(final Author author)
     {
         return Book.builder()
                 .isbn("123-4-5678-9012-3")
@@ -56,7 +56,7 @@ public final class TestDataUtil
                 .build();
     }
 
-    public static Book CreateTestBookC(final Author author)
+    public static Book createTestBookC(final Author author)
     {
         return Book.builder()
                 .isbn("456-7-8901-2345-6")
