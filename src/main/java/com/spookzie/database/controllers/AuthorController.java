@@ -1,0 +1,38 @@
+package com.spookzie.database.controllers;
+
+import com.spookzie.database.domain.dto.AuthorDto;
+import com.spookzie.database.domain.entities.AuthorEntity;
+import com.spookzie.database.mappers.Mapper;
+import com.spookzie.database.services.AuthorService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@RestController
+public class AuthorController
+{
+    private final AuthorService authorService;
+    private final Mapper<AuthorEntity, AuthorDto> authorMapper;
+
+
+    // Constructor
+    public AuthorController(AuthorService author_service, Mapper<AuthorEntity, AuthorDto> author_mapper)
+    {
+        this.authorService = author_service;
+        this.authorMapper  = author_mapper;
+    }
+
+
+    // POST - Create
+    @PostMapping(path = "/authors")
+    public ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto author_dto)
+    {
+        AuthorEntity authorEntity = this.authorMapper.mapFrom(author_dto);   // AuthorDto -> AuthorEntity
+        AuthorEntity savedAuthorEntity = this.authorService.createAuthor(authorEntity); // Saving the Entity
+
+        return new ResponseEntity<>(this.authorMapper.mapTo(savedAuthorEntity), HttpStatus.CREATED);  // Returning the updated info to client
+    }
+}

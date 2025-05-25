@@ -1,11 +1,10 @@
-package com.spookzie.database.domain;
+package com.spookzie.database.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 
 @Data
@@ -14,7 +13,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 @Builder
 @Entity
 @Table(name = "authors")
-public class Author
+public class AuthorEntity
 {
     // Using Long & Integer here instead of long & int
     // This makes sure that the default value for a new variable would be null instead of 0
@@ -24,5 +23,6 @@ public class Author
     private Long id;
 
     private String name;
+
     private Integer age;
 }

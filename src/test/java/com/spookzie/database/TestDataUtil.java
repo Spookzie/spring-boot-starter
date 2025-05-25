@@ -1,7 +1,7 @@
 package com.spookzie.database;
 
-import com.spookzie.database.domain.Author;
-import com.spookzie.database.domain.Book;
+import com.spookzie.database.domain.entities.AuthorEntity;
+import com.spookzie.database.domain.entities.BookEntity;
 
 public final class TestDataUtil
 {
@@ -10,25 +10,25 @@ public final class TestDataUtil
 
     // Authors
     //--------------------------
-    public static Author createTestAuthorA()
+    public static AuthorEntity createTestAuthorA()
     {
-        return Author.builder()
+        return AuthorEntity.builder()
                 .name("Abigail Rose")
                 .age(80)
                 .build();
     }
 
-    public static Author createTestAuthorB()
+    public static AuthorEntity createTestAuthorB()
     {
-        return Author.builder()
+        return AuthorEntity.builder()
                 .name("Mark Lawrence")
                 .age(47)
                 .build();
     }
 
-    public static Author createTestAuthorC()
+    public static AuthorEntity createTestAuthorC()
     {
-        return Author.builder()
+        return AuthorEntity.builder()
                 .name("Haruki Murakami")
                 .age(65)
                 .build();
@@ -38,30 +38,30 @@ public final class TestDataUtil
 
     // Books
     //-------------------------
-    public static Book createTestBookA(final Author author)
+    public static BookEntity createTestBookA(final AuthorEntity authorEntity)
     {
-        return Book.builder()
+        return BookEntity.builder()
                 .isbn("978-1-2345-6789-0")
                 .title("The Shadow in the Attic")
-                .author(author)
+                .authorEntity(authorEntity)
                 .build();
     }
 
-    public static Book createTestBookB(final Author author)
+    public static BookEntity createTestBookB(final AuthorEntity authorEntity)
     {
-        return Book.builder()
+        return BookEntity.builder()
                 .isbn("123-4-5678-9012-3")
                 .title("Prince of Thorns")
-                .author(author)
+                .authorEntity(authorEntity)
                 .build();
     }
 
-    public static Book createTestBookC(final Author author)
+    public static BookEntity createTestBookC(final AuthorEntity authorEntity)
     {
-        return Book.builder()
+        return BookEntity.builder()
                 .isbn("456-7-8901-2345-6")
                 .title("Norwegian Wood")
-                .author(author)
+                .authorEntity(authorEntity)
                 .build();
     }
     //-------------------------
