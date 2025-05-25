@@ -6,9 +6,14 @@ import com.spookzie.database.mappers.Mapper;
 import com.spookzie.database.services.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 /*
 * Defining CRUD operations using REST API principles & design
@@ -37,6 +42,17 @@ public class AuthorController
         AuthorDto savedAuthorDto = this.authorMapper.mapTo(savedAuthorEntity);
 
         return new ResponseEntity<>(savedAuthorDto, HttpStatus.CREATED);  // Returning the updated info to client with status 201
+    }
 
+
+    //  GET - Read Many
+    @GetMapping(path = "/authors")
+    public List<AuthorDto> listAuthors()
+    {
+        List<AuthorEntity> authors = this.authorService.findAll();
+
+        return authors.stream()
+                .map(this.authorMapper::mapTo)
+                .collect(Collectors.toList());
     }
 }
