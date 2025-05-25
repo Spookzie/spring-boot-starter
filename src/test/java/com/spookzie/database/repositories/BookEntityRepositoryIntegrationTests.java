@@ -15,15 +15,15 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+/*  Unit Tests  */
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class BookEntityRepositoryIntegrationTests
 {
-    private final BookRepository bookRepo;    // Implementation that is being tested
+    private final BookRepository bookRepo;
 
 
-    // Constructor
     @Autowired
     public BookEntityRepositoryIntegrationTests(BookRepository under_test)
     {
@@ -31,75 +31,69 @@ public class BookEntityRepositoryIntegrationTests
     }
 
 
-    // Read One Test
+    /*  CRUD Test - Read One    */
     @Test
     public void testThatBookCanBeCreatedAndRecalled()
     {
-        // Creating Author (for author_id in book)
-        AuthorEntity authorEntity = TestDataUtil.createTestAuthorEntityA();
+        AuthorEntity testAuthorEntityA = TestDataUtil.createTestAuthorEntityA(); // Creating Author (for author_id in book)
 
-        // Creating Book
-        BookEntity bookEntity = this.bookRepo.save(TestDataUtil.createTestBookEntityA(authorEntity));    // Inserting
+        BookEntity testBookEntity = this.bookRepo.save(TestDataUtil.createTestBookEntityA(testAuthorEntityA));    // Creating book (saving into DB)
 
-        // Recalling book
-        Optional<BookEntity> result = this.bookRepo.findById(bookEntity.getIsbn());    // Fetching
-        assertThat(result).isPresent(); // Confirming existence
-        assertThat(result.get()).isEqualTo(bookEntity);
+
+        Optional<BookEntity> result = this.bookRepo.findById(testBookEntity.getIsbn());    // Recalling book (Finding/Reading/Fetching from DB)
+
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(testBookEntity);
     }
 
 
-    // Read Many Test
+    /*  CRUD Test - Read Many   */
     @Test
     public void testThatMultipleBooksCanBeCreatedAndRecalled()
     {
-        // Creating author
-        AuthorEntity authorEntity = TestDataUtil.createTestAuthorEntityA();
+        AuthorEntity testAuthorEntityA = TestDataUtil.createTestAuthorEntityA();
 
-        // Creating Books
-        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(authorEntity));
-        BookEntity bookEntityB = this.bookRepo.save(TestDataUtil.createTestBookB(authorEntity));
-        BookEntity bookEntityC = this.bookRepo.save(TestDataUtil.createTestBookC(authorEntity));
+        BookEntity testBookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(testAuthorEntityA));
+        BookEntity testBookEntityB = this.bookRepo.save(TestDataUtil.createTestBookB(testAuthorEntityA));
+        BookEntity testBookEntityC = this.bookRepo.save(TestDataUtil.createTestBookC(testAuthorEntityA));
 
-
-        // Recalling Books
         Iterable<BookEntity> result = this.bookRepo.findAll();
+
         assertThat(result)
                 .hasSize(3)
-                .containsExactly(bookEntityA, bookEntityB, bookEntityC);
+                .containsExactly(testBookEntityA, testBookEntityB, testBookEntityC);
     }
 
 
-    // Update Test
+    /*  CRUD Test - Update  */
     @Test
     public void testThatBookCanBeUpdated()
     {
-        // Creating author & book
-        AuthorEntity authorEntityA = TestDataUtil.createTestAuthorEntityA();
-        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(authorEntityA));
+        AuthorEntity testAuthorEntityA = TestDataUtil.createTestAuthorEntityA();
 
-        bookEntityA.setTitle("UPDATED");    // Changing book title
-        this.bookRepo.save(bookEntityA);    // Updating the book
+        BookEntity testBookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(testAuthorEntityA));
 
-        // Finding & checking the updated book
-        Optional<BookEntity> result = this.bookRepo.findById(bookEntityA.getIsbn());
+        testBookEntityA.setTitle("UPDATED");    // Changing book title
+        this.bookRepo.save(testBookEntityA);    // Updating the book
+
+        Optional<BookEntity> result = this.bookRepo.findById(testBookEntityA.getIsbn());
+
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(bookEntityA);
+        assertThat(result.get()).isEqualTo(testBookEntityA);
     }
 
 
-    // Delete Test
+    /*  CRUD Test - Delete  */
     @Test
     public void testThatBookCanBeDeleted()
     {
-        // Create author & book
-        AuthorEntity authorEntityA = TestDataUtil.createTestAuthorEntityA();
-        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(authorEntityA));
+        AuthorEntity testAuthorEntityA = TestDataUtil.createTestAuthorEntityA();
 
-        // Delete book
-        this.bookRepo.deleteById(bookEntityA.getIsbn());
+        BookEntity testBookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(testAuthorEntityA));
 
-        // Check if book is deleted
-        Optional<BookEntity> result = this.bookRepo.findById(bookEntityA.getIsbn());
+        this.bookRepo.deleteById(testBookEntityA.getIsbn());
+
+        Optional<BookEntity> result = this.bookRepo.findById(testBookEntityA.getIsbn());
         assertThat(result).isEmpty();
     }
 }

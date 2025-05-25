@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
+/*
+ * Defining CRUD operations using REST API principles & design
+ * Setting up HTTP methods
+ *****************************************************/
 @RestController
 public class BookController
 {
