@@ -5,14 +5,13 @@ import com.spookzie.database.repositories.AuthorRepository;
 import com.spookzie.database.services.AuthorService;
 import org.springframework.stereotype.Service;
 
-
+/*  Defines how author is created   */
 @Service
 public class AuthorServiceImpl implements AuthorService
 {
     private final AuthorRepository authorRepository;
 
 
-    // Constructor
     public AuthorServiceImpl(AuthorRepository author_repository)
     {
         this.authorRepository = author_repository;

@@ -3,7 +3,7 @@ package com.spookzie.database.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spookzie.database.TestDataUtil;
 import com.spookzie.database.domain.dto.AuthorDto;
-import com.spookzie.database.domain.entities.AuthorEntity;
+import com.spookzie.database.domain.dto.BookDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +21,14 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
-public class AuthorControllerIntegrationTests
+public class BookControllerIntegrationTests
 {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
 
     @Autowired
-    public AuthorControllerIntegrationTests(MockMvc mock_mvc)
+    public BookControllerIntegrationTests(MockMvc mock_mvc, ObjectMapper object_mapper)
     {
         this.mockMvc = mock_mvc;
         this.objectMapper = new ObjectMapper();
@@ -36,37 +36,36 @@ public class AuthorControllerIntegrationTests
 
 
     @Test
-    public void testThatCreateAuthorSuccessfullyReturnsHttp201Created() throws Exception
-     {
-        AuthorDto testAuthorDto = TestDataUtil.createTestAuthorDtoA();
-        String testAuthorJson = this.objectMapper.writeValueAsString(testAuthorDto);  // Converting AuthorEntity object to JSON string
+    public void testThatCreateBookSuccessfullyReturnsHttp201Created() throws Exception
+    {
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
+        String testBookJson = this.objectMapper.writeValueAsString(testBookDto);  // Converting BookDto to JSON string
 
         this.mockMvc.perform(
-                MockMvcRequestBuilders.post("/authors")
+                MockMvcRequestBuilders.put("/books/" + testBookDto.getIsbn())
                         .contentType(MediaType.APPLICATION_JSON)    // Tells Spring to treat the request body as JSON
-                        .content(testAuthorJson)    // Adds JSON string as the body of request
+                        .content(testBookJson)  // Adds JSON string as the body of request
         ).andExpect(
                 MockMvcResultMatchers.status().isCreated()
         );
     }
 
+
     /*  Testing that the author is posted with correct values   */
     @Test
-    public void testThatCreateAuthorSuccessfullyReturnsSavedAuthor() throws Exception
-     {
-        AuthorDto testAuthorDto = TestDataUtil.createTestAuthorDtoA();
-        String authorJson = this.objectMapper.writeValueAsString(testAuthorDto);
+    public void testThatCreateBookSuccessfullyReturnsSavedBook() throws Exception
+    {
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
+        String bookJson = this.objectMapper.writeValueAsString(testBookDto);
 
         this.mockMvc.perform(
-                MockMvcRequestBuilders.post("/authors")
+                MockMvcRequestBuilders.put("/books/" + testBookDto.getIsbn())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(authorJson)
+                        .content(bookJson)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+                MockMvcResultMatchers.jsonPath("$.isbn").value(testBookDto.getIsbn())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("Abigail Rose")
-        ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.age").value(80)
+                MockMvcResultMatchers.jsonPath("$.title").value(testBookDto.getTitle())
         );
     }
 }

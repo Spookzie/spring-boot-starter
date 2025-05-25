@@ -37,7 +37,7 @@ public class AuthorEntityRepositoryIntegrationTests
     public void testThatAuthorCanBeCreatedAndRecalled()
     {
         // Creating author
-        AuthorEntity authorEntity = this.authorRepo.save(TestDataUtil.createTestAuthorA());  // Inserting into DB
+        AuthorEntity authorEntity = this.authorRepo.save(TestDataUtil.createTestAuthorEntityA());  // Inserting into DB
 
         // Recalling author
         Optional<AuthorEntity> result = this.authorRepo.findById(authorEntity.getId());   // Fetching from DB
@@ -50,7 +50,7 @@ public class AuthorEntityRepositoryIntegrationTests
     public void testThatMultipleAuthorsCanBeCreatedAndRecalled()
     {
         // Creating authors
-        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorA());
+        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorEntityA());
         AuthorEntity authorEntityB = this.authorRepo.save(TestDataUtil.createTestAuthorB());
         AuthorEntity authorEntityC = this.authorRepo.save(TestDataUtil.createTestAuthorC());
 
@@ -66,7 +66,7 @@ public class AuthorEntityRepositoryIntegrationTests
     public void testThatAuthorCanBeUpdated()
     {
         // Creating author
-        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorA());
+        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorEntityA());
 
         authorEntityA.setName("UPDATED"); // Changing author's name
         this.authorRepo.save(authorEntityA);    // Updating the author
@@ -82,7 +82,7 @@ public class AuthorEntityRepositoryIntegrationTests
     public void testThatAuthorCanBeDeleted()
     {
         // Creating author
-        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorA());
+        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorEntityA());
 
         // Deleting author
         this.authorRepo.deleteById(authorEntityA.getId());
@@ -100,7 +100,7 @@ public class AuthorEntityRepositoryIntegrationTests
     @Test
     public void testThatGetAuthorsWithAgeLessThan()
     {
-        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorA());
+        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorEntityA());
         AuthorEntity authorEntityB = this.authorRepo.save(TestDataUtil.createTestAuthorB());
         AuthorEntity authorEntityC = this.authorRepo.save(TestDataUtil.createTestAuthorC());
 
@@ -112,7 +112,7 @@ public class AuthorEntityRepositoryIntegrationTests
     @Test
     public void testThatGetAuthorsWithAgeGreaterThan()
     {
-        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorA());
+        AuthorEntity authorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorEntityA());
         AuthorEntity authorEntityB = this.authorRepo.save(TestDataUtil.createTestAuthorB());
         AuthorEntity authorEntityC = this.authorRepo.save(TestDataUtil.createTestAuthorC());
 

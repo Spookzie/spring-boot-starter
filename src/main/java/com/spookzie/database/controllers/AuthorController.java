@@ -18,7 +18,6 @@ public class AuthorController
     private final Mapper<AuthorEntity, AuthorDto> authorMapper;
 
 
-    // Constructor
     public AuthorController(AuthorService author_service, Mapper<AuthorEntity, AuthorDto> author_mapper)
     {
         this.authorService = author_service;
@@ -30,9 +29,11 @@ public class AuthorController
     @PostMapping(path = "/authors")
     public ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto author_dto)
     {
-        AuthorEntity authorEntity = this.authorMapper.mapFrom(author_dto);   // AuthorDto -> AuthorEntity
-        AuthorEntity savedAuthorEntity = this.authorService.createAuthor(authorEntity); // Saving the Entity
+        AuthorEntity authorEntity = this.authorMapper.mapFrom(author_dto);
+        AuthorEntity savedAuthorEntity = this.authorService.createAuthor(authorEntity); // Saving (Creating) the Entity
+        AuthorDto savedAuthorDto = this.authorMapper.mapTo(savedAuthorEntity);
 
-        return new ResponseEntity<>(this.authorMapper.mapTo(savedAuthorEntity), HttpStatus.CREATED);  // Returning the updated info to client
+        return new ResponseEntity<>(savedAuthorDto, HttpStatus.CREATED);  // Returning the updated info to client with status 201
+
     }
 }

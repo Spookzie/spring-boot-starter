@@ -36,10 +36,10 @@ public class BookEntityRepositoryIntegrationTests
     public void testThatBookCanBeCreatedAndRecalled()
     {
         // Creating Author (for author_id in book)
-        AuthorEntity authorEntity = TestDataUtil.createTestAuthorA();
+        AuthorEntity authorEntity = TestDataUtil.createTestAuthorEntityA();
 
         // Creating Book
-        BookEntity bookEntity = this.bookRepo.save(TestDataUtil.createTestBookA(authorEntity));    // Inserting
+        BookEntity bookEntity = this.bookRepo.save(TestDataUtil.createTestBookEntityA(authorEntity));    // Inserting
 
         // Recalling book
         Optional<BookEntity> result = this.bookRepo.findById(bookEntity.getIsbn());    // Fetching
@@ -53,10 +53,10 @@ public class BookEntityRepositoryIntegrationTests
     public void testThatMultipleBooksCanBeCreatedAndRecalled()
     {
         // Creating author
-        AuthorEntity authorEntity = TestDataUtil.createTestAuthorA();
+        AuthorEntity authorEntity = TestDataUtil.createTestAuthorEntityA();
 
         // Creating Books
-        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookA(authorEntity));
+        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(authorEntity));
         BookEntity bookEntityB = this.bookRepo.save(TestDataUtil.createTestBookB(authorEntity));
         BookEntity bookEntityC = this.bookRepo.save(TestDataUtil.createTestBookC(authorEntity));
 
@@ -74,8 +74,8 @@ public class BookEntityRepositoryIntegrationTests
     public void testThatBookCanBeUpdated()
     {
         // Creating author & book
-        AuthorEntity authorEntityA = TestDataUtil.createTestAuthorA();
-        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookA(authorEntityA));
+        AuthorEntity authorEntityA = TestDataUtil.createTestAuthorEntityA();
+        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(authorEntityA));
 
         bookEntityA.setTitle("UPDATED");    // Changing book title
         this.bookRepo.save(bookEntityA);    // Updating the book
@@ -92,8 +92,8 @@ public class BookEntityRepositoryIntegrationTests
     public void testThatBookCanBeDeleted()
     {
         // Create author & book
-        AuthorEntity authorEntityA = TestDataUtil.createTestAuthorA();
-        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookA(authorEntityA));
+        AuthorEntity authorEntityA = TestDataUtil.createTestAuthorEntityA();
+        BookEntity bookEntityA = this.bookRepo.save(TestDataUtil.createTestBookEntityA(authorEntityA));
 
         // Delete book
         this.bookRepo.deleteById(bookEntityA.getIsbn());
