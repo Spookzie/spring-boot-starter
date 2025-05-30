@@ -3,6 +3,7 @@ package com.spookzie.database.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spookzie.database.TestDataUtil;
 import com.spookzie.database.domain.dto.BookDto;
+import com.spookzie.database.domain.entities.AuthorEntity;
 import com.spookzie.database.domain.entities.BookEntity;
 import com.spookzie.database.services.BookService;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,7 @@ public class BookControllerIntegrationTests
     }
 
 
+    //  PUT - Create Tests  //
     @Test
     public void testThatCreateBookReturnsHttp201() throws Exception
     {
@@ -53,8 +55,7 @@ public class BookControllerIntegrationTests
         );
     }
 
-
-    /*  Testing that the author is posted with correct values   */
+    /*  Testing that the book is posted with correct values */
     @Test
     public void testThatCreateBookReturnsSavedBook() throws Exception
     {
@@ -73,6 +74,7 @@ public class BookControllerIntegrationTests
     }
 
 
+    //  GET - Read Many Tests   //
     @Test
     public void testThatListBooksReturnsHttp200() throws Exception
     {
@@ -84,7 +86,7 @@ public class BookControllerIntegrationTests
         );
     }
 
-
+    /*  Testing that multiple books are read with correct values    */
     @Test
     public void testThatListBooksReturnsListOfBooks() throws Exception
     {
@@ -98,6 +100,53 @@ public class BookControllerIntegrationTests
                 MockMvcResultMatchers.jsonPath("$[0].isbn").value(testBookEntity.getIsbn())
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].title").value(testBookEntity.getTitle())
+        );
+    }
+
+
+    //  GET - Read One Tests    //
+    @Test
+    public void testThatGetBookReturnsHttp200WhenBookExists() throws Exception
+    {
+        BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
+        this.bookService.createBook(testBookEntity.getIsbn(), testBookEntity);
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/" + testBookEntity.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatGetBookReturnsHttp404WhenNoBookExists() throws Exception
+    {
+        BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/" + testBookEntity.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    /*  Testing that a single book is read with correct values  */
+    @Test
+    public void testThatGetBookReturnsBookWhenExists() throws Exception
+    {
+        BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
+        this.bookService.createBook(testBookEntity.getIsbn(), testBookEntity);
+
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/" + testBookEntity.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.isbn").value(testBookEntity.getIsbn())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.title").value(testBookEntity.getTitle())
         );
     }
 }

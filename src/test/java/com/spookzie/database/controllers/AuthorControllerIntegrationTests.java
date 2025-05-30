@@ -85,7 +85,6 @@ public class AuthorControllerIntegrationTests
         );
     }
 
-
     /*  Testing that multiple authors are read with correct values  */
     @Test
     public void testThatListAuthorsReturnsListOfAuthors() throws Exception
@@ -102,6 +101,51 @@ public class AuthorControllerIntegrationTests
                 MockMvcResultMatchers.jsonPath("$[0].name").value("Abigail Rose")
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].age").value(80)
+        );
+    }
+
+
+    @Test
+    public void testThatGetAuthorReturnsHttp200WhenAuthorExists() throws Exception
+    {
+        AuthorEntity testAuthorEntityA = TestDataUtil.createTestAuthorEntityA();
+        this.authorService.createAuthor(testAuthorEntityA);
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatGetAuthorReturnsHttp404WhenNoAuthorExist() throws Exception
+    {
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    /*  Testing that a single author is read with correct values  */
+    @Test
+    public void testThatGetAuthorReturnsAuthorWhenExists() throws Exception
+    {
+        AuthorEntity testAuthorEntityA = TestDataUtil.createTestAuthorEntityA();
+        this.authorService.createAuthor(testAuthorEntityA);
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("Abigail Rose")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.age").value(80)
         );
     }
 }

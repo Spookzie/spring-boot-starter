@@ -1,17 +1,16 @@
 package com.spookzie.database.controllers;
 
 import com.spookzie.database.domain.dto.AuthorDto;
+import com.spookzie.database.domain.dto.BookDto;
 import com.spookzie.database.domain.entities.AuthorEntity;
 import com.spookzie.database.mappers.Mapper;
 import com.spookzie.database.services.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -54,5 +53,20 @@ public class AuthorController
         return authors.stream()
                 .map(this.authorMapper::mapTo)
                 .collect(Collectors.toList());
+    }
+
+
+    // GET - Read One
+    @GetMapping(path = "/authors/{id}")
+    public ResponseEntity<AuthorDto> getAuthor(@PathVariable("id") Long id)
+    {
+        Optional<AuthorEntity> foundAuthor = this.authorService.findOne(id);
+
+        return foundAuthor.map(
+                authorEntity -> {
+                    AuthorDto authorDto = this.authorMapper.mapTo(authorEntity);
+                    return new ResponseEntity<>(authorDto, HttpStatus.OK);
+                }
+        ).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
