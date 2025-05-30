@@ -38,9 +38,9 @@ public class AuthorServiceImpl implements AuthorService
         * spliterator() - Converts the Iterable into a Spliterator, which is used to create Java Stream
         * StreamSupport.stream(...false) - Converts Spliterator into a sequential stream (cuz false indicates not parallel)
         *****************************************/
-        return StreamSupport.stream(this.authorRepository
-                        .findAll()
-                        .spliterator(),
+        return StreamSupport
+                .stream(
+                        this.authorRepository.findAll().spliterator(),
                         false)
                 .collect(Collectors.toList());
     }

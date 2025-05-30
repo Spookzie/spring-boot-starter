@@ -6,10 +6,10 @@ import com.spookzie.database.mappers.Mapper;
 import com.spookzie.database.services.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /*
@@ -34,7 +34,7 @@ public class BookController
     * PUT - Create
     * We use PUT instead of POST because we want to specify the id ourselves
     ************************************************/
-    @PutMapping("/books/{isbn}")
+    @PutMapping(path = "/books/{isbn}")
     public ResponseEntity<BookDto> createBook(
             @PathVariable("isbn") String isbn,
             @RequestBody BookDto book_dto)
@@ -44,5 +44,17 @@ public class BookController
         BookDto savedBookDto = this.bookMapper.mapTo(savedBookEntity);
 
         return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);  // Returning the updated info to client with status 201
+    }
+
+
+    // GET - Read Many
+    @GetMapping(path = "/books")
+    public List<BookDto> listBooks()
+    {
+        List<BookEntity> books = this.bookService.findAll();
+
+        return books.stream()
+                .map(this.bookMapper::mapTo)
+                .collect(Collectors.toList());
     }
 }

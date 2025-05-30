@@ -2,8 +2,9 @@ package com.spookzie.database.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spookzie.database.TestDataUtil;
-import com.spookzie.database.domain.dto.AuthorDto;
 import com.spookzie.database.domain.dto.BookDto;
+import com.spookzie.database.domain.entities.BookEntity;
+import com.spookzie.database.services.BookService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +24,22 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 public class BookControllerIntegrationTests
 {
+    private final BookService bookService;
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
 
     @Autowired
-    public BookControllerIntegrationTests(MockMvc mock_mvc, ObjectMapper object_mapper)
+    public BookControllerIntegrationTests(BookService book_service, MockMvc mock_mvc)
     {
+        this.bookService = book_service;
         this.mockMvc = mock_mvc;
         this.objectMapper = new ObjectMapper();
     }
 
 
     @Test
-    public void testThatCreateBookSuccessfullyReturnsHttp201Created() throws Exception
+    public void testThatCreateBookReturnsHttp201() throws Exception
     {
         BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
         String testBookJson = this.objectMapper.writeValueAsString(testBookDto);  // Converting BookDto to JSON string
@@ -53,7 +56,7 @@ public class BookControllerIntegrationTests
 
     /*  Testing that the author is posted with correct values   */
     @Test
-    public void testThatCreateBookSuccessfullyReturnsSavedBook() throws Exception
+    public void testThatCreateBookReturnsSavedBook() throws Exception
     {
         BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
         String bookJson = this.objectMapper.writeValueAsString(testBookDto);
@@ -66,6 +69,35 @@ public class BookControllerIntegrationTests
                 MockMvcResultMatchers.jsonPath("$.isbn").value(testBookDto.getIsbn())
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.title").value(testBookDto.getTitle())
+        );
+    }
+
+
+    @Test
+    public void testThatListBooksReturnsHttp200() throws Exception
+    {
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+
+    @Test
+    public void testThatListBooksReturnsListOfBooks() throws Exception
+    {
+        BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
+        this.bookService.createBook(testBookEntity.getIsbn(), testBookEntity);
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].isbn").value(testBookEntity.getIsbn())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].title").value(testBookEntity.getTitle())
         );
     }
 }

@@ -30,9 +30,9 @@ public class AuthorControllerIntegrationTests
 
 
     @Autowired
-    public AuthorControllerIntegrationTests(AuthorService author_ervice, MockMvc mock_mvc)
+    public AuthorControllerIntegrationTests(AuthorService author_service, MockMvc mock_mvc)
     {
-        this.authorService = author_ervice;
+        this.authorService = author_service;
         this.mockMvc = mock_mvc;
         this.objectMapper = new ObjectMapper();
     }
@@ -75,7 +75,7 @@ public class AuthorControllerIntegrationTests
 
 
     @Test
-    public void testThatListAuthorReturnsHttp200() throws Exception
+    public void testThatListAuthorsReturnsHttp200() throws Exception
     {
         this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/authors")
@@ -88,7 +88,7 @@ public class AuthorControllerIntegrationTests
 
     /*  Testing that multiple authors are read with correct values  */
     @Test
-    public void testThatListAuthorReturnsListOfAuthors() throws Exception
+    public void testThatListAuthorsReturnsListOfAuthors() throws Exception
     {
         AuthorEntity testAuthorEntityA = TestDataUtil.createTestAuthorEntityA();
         this.authorService.createAuthor(testAuthorEntityA);
