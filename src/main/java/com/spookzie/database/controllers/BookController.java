@@ -33,7 +33,7 @@ public class BookController
 
     /*
     * PUT - Create
-    * We use PUT instead of POST because we want to specify the id ourselves
+    * We use PUT instead of POST because we want to specify the id (isbn in this case) ourselves
     ************************************************/
     @PutMapping(path = "/books/{isbn}")
     public ResponseEntity<BookDto> createBook(

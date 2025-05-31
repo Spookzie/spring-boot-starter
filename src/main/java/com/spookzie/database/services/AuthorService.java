@@ -9,9 +9,11 @@ import java.util.Optional;
 /*  Service Layer Interface for Author  */
 public interface AuthorService
 {
-    AuthorEntity createAuthor(AuthorEntity author_entity);
+    AuthorEntity saveAuthor(AuthorEntity author_entity);
 
     List<AuthorEntity> findAll();
 
     Optional<AuthorEntity> findOne(Long id);
+
+    boolean doesExist(Long id);
 }

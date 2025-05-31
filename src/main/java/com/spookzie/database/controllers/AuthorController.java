@@ -1,7 +1,6 @@
 package com.spookzie.database.controllers;
 
 import com.spookzie.database.domain.dto.AuthorDto;
-import com.spookzie.database.domain.dto.BookDto;
 import com.spookzie.database.domain.entities.AuthorEntity;
 import com.spookzie.database.mappers.Mapper;
 import com.spookzie.database.services.AuthorService;
@@ -37,7 +36,7 @@ public class AuthorController
     public ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto author_dto)
     {
         AuthorEntity authorEntity = this.authorMapper.mapFrom(author_dto);
-        AuthorEntity savedAuthorEntity = this.authorService.createAuthor(authorEntity); // Saving (Creating) the Entity
+        AuthorEntity savedAuthorEntity = this.authorService.saveAuthor(authorEntity); // Saving (Creating) the Entity
         AuthorDto savedAuthorDto = this.authorMapper.mapTo(savedAuthorEntity);
 
         return new ResponseEntity<>(savedAuthorDto, HttpStatus.CREATED);  // Returning the updated info to client with status 201
@@ -68,5 +67,23 @@ public class AuthorController
                     return new ResponseEntity<>(authorDto, HttpStatus.OK);
                 }
         ).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
+    // PUT - Full Update
+    @PutMapping(path = "/authors/{id}")
+    public ResponseEntity<AuthorDto> fullUpdateAuthor(
+            @PathVariable("id") Long id,
+            @RequestBody AuthorDto author_dto)
+    {
+        if(!this.authorService.doesExist(id))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        author_dto.setId(id);
+        AuthorEntity authorEntity = this.authorMapper.mapFrom(author_dto);
+        AuthorEntity savedAuthorEntity = this.authorService.saveAuthor(authorEntity);
+        AuthorDto savedAuthorDto = this.authorMapper.mapTo(savedAuthorEntity);
+
+        return new ResponseEntity<>(savedAuthorDto, HttpStatus.OK);
     }
 }
