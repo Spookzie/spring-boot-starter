@@ -257,4 +257,19 @@ public class AuthorControllerIntegrationTests
                 MockMvcResultMatchers.jsonPath("$.age").value(savedTestAuthorEntity.getAge())
         );
     }
+
+
+    //  DELETE - Delete Tests   //
+    @Test
+    public void testThatDeleteAuthorReturnsHttp204() throws Exception
+    {
+        /* No need to save an author, as deleting an existing author or deleting a non-existent author is same  */
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.delete("/authors/777")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 }

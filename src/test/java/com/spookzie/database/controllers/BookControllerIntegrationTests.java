@@ -236,4 +236,16 @@ public class BookControllerIntegrationTests
                 MockMvcResultMatchers.jsonPath("$.title").value(testBookDto.getTitle())
         );
     }
+
+
+    // DELETE - Delete Tests    //
+    @Test
+    public void testThatDeleteBookReturnsHttp204() throws Exception
+     {
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/books/777")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 }

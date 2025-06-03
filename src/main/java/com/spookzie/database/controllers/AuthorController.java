@@ -18,23 +18,20 @@ import java.util.stream.Collectors;
 * Setting up HTTP methods
 *****************************************************/
 @RestController
-public class AuthorController
-{
+public class AuthorController {
     private final AuthorService authorService;
     private final Mapper<AuthorEntity, AuthorDto> authorMapper;
 
 
-    public AuthorController(AuthorService author_service, Mapper<AuthorEntity, AuthorDto> author_mapper)
-    {
+    public AuthorController(AuthorService author_service, Mapper<AuthorEntity, AuthorDto> author_mapper) {
         this.authorService = author_service;
-        this.authorMapper  = author_mapper;
+        this.authorMapper = author_mapper;
     }
 
 
     // POST - Create
     @PostMapping(path = "/authors")
-    public ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto author_dto)
-    {
+    public ResponseEntity<AuthorDto> createAuthor(@RequestBody AuthorDto author_dto) {
         AuthorEntity authorEntity = this.authorMapper.mapFrom(author_dto);
         AuthorEntity savedAuthorEntity = this.authorService.saveAuthor(authorEntity); // Saving (Creating) the Entity
         AuthorDto savedAuthorDto = this.authorMapper.mapTo(savedAuthorEntity);
@@ -45,8 +42,7 @@ public class AuthorController
 
     //  GET - Read Many
     @GetMapping(path = "/authors")
-    public List<AuthorDto> listAuthors()
-    {
+    public List<AuthorDto> listAuthors() {
         List<AuthorEntity> authors = this.authorService.findAll();
 
         return authors.stream()
@@ -57,8 +53,7 @@ public class AuthorController
 
     // GET - Read One
     @GetMapping(path = "/authors/{id}")
-    public ResponseEntity<AuthorDto> getAuthor(@PathVariable("id") Long id)
-    {
+    public ResponseEntity<AuthorDto> getAuthor(@PathVariable("id") Long id) {
         Optional<AuthorEntity> foundAuthor = this.authorService.findOne(id);
 
         return foundAuthor.map(
@@ -72,9 +67,8 @@ public class AuthorController
 
     // PUT - Full Update
     @PutMapping(path = "/authors/{id}")
-    public ResponseEntity<AuthorDto> fullUpdateAuthor(@PathVariable("id") Long id, @RequestBody AuthorDto author_dto)
-    {
-        if(!this.authorService.doesExist(id))
+    public ResponseEntity<AuthorDto> fullUpdateAuthor(@PathVariable("id") Long id, @RequestBody AuthorDto author_dto) {
+        if (!this.authorService.doesExist(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         author_dto.setId(id);
@@ -88,15 +82,23 @@ public class AuthorController
 
     // PATCH - Partial Update
     @PatchMapping(path = "/authors/{id}")
-    public ResponseEntity<AuthorDto> partialUpdateAuthor(@PathVariable("id") Long id, @RequestBody AuthorDto author_dto)
-    {
-        if(!this.authorService.doesExist(id))
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<AuthorDto> partialUpdateAuthor(@PathVariable("id") Long id, @RequestBody AuthorDto author_dto) {
+        if (!this.authorService.doesExist(id))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         AuthorEntity authorEntity = this.authorMapper.mapFrom(author_dto);
         AuthorEntity updatedAuthorEntity = this.authorService.partialUpdate(id, authorEntity);
         AuthorDto updatedAuthorDto = this.authorMapper.mapTo(updatedAuthorEntity);
 
         return new ResponseEntity<>(updatedAuthorDto, HttpStatus.OK);
+    }
+
+
+    // DELETE
+    @DeleteMapping(path = "/authors/{id}")
+    public ResponseEntity deleteAuthor(@PathVariable("id") Long id)
+    {
+        this.authorService.delete(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
