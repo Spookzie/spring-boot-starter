@@ -32,27 +32,23 @@ public class BookController
 
 
     /*
-    * PUT - Create
-    * We use PUT instead of POST because we want to specify the id (isbn in this case) ourselves
+    * PUT - Create & Full Update
+    * We use PUT for creating instead of POST because we want to specify the id (isbn in this case) ourselves
     ************************************************/
     @PutMapping(path = "/books/{isbn}")
     public ResponseEntity<BookDto> createUpdateBook(@PathVariable("isbn") String isbn, @RequestBody BookDto book_dto)
     {
         BookEntity bookEntity = this.bookMapper.mapFrom(book_dto);
 
-        boolean bookExists = this.bookService.doesExist(isbn);
+        boolean bookExists = this.bookService.doesExist(isbn);  // We check before saving the book to make sure what HTTP Status to output
 
         BookEntity savedBookEntity = this.bookService.createUpdateBook(isbn, bookEntity); // Saving (Creating) the Entity
         BookDto savedBookDto = this.bookMapper.mapTo(savedBookEntity);
 
         if(bookExists)
-        {
             return new ResponseEntity<>(savedBookDto, HttpStatus.OK);
-        }
         else
-        {
             return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);  // Returning the updated info to client with status 20
-        }
     }
 
 
@@ -80,5 +76,20 @@ public class BookController
                     return new ResponseEntity<>(bookDto, HttpStatus.OK);
                 }
         ).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
+    // PATCH - Partial Update
+    @PatchMapping(path = "/books/{isbn}")
+    public ResponseEntity<BookDto> partialUpdateBook(@PathVariable("isbn") String isbn, @RequestBody BookDto book_dto)
+    {
+        if(!this.bookService.doesExist(isbn))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        BookEntity bookEntity = this.bookMapper.mapFrom(book_dto);
+        BookEntity updatedBookEntity = this.bookService.partialUpdate(isbn, bookEntity);
+        BookDto updatedBookDto = this.bookMapper.mapTo(updatedBookEntity);
+
+        return new ResponseEntity<>(updatedBookDto, HttpStatus.OK);
     }
 }
