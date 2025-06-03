@@ -9,9 +9,11 @@ import java.util.Optional;
 /*  Service Layer Interface for Book    */
 public interface BookService
 {
-    BookEntity createBook(String isbn, BookEntity book_entity);
+    BookEntity createUpdateBook(String isbn, BookEntity book_entity);
 
     List<BookEntity> findAll();
 
     Optional<BookEntity> findOne(String isbn);
+
+    boolean doesExist(String isbn);
 }

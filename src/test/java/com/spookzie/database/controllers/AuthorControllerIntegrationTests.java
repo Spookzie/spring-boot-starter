@@ -187,6 +187,7 @@ public class AuthorControllerIntegrationTests
         );
     }
 
+    /*  Testing that the author is fully updated with correct values  */
     @Test
     public void testThatFullUpdateAuthorUpdatesExistingAuthor() throws Exception
     {
@@ -208,6 +209,52 @@ public class AuthorControllerIntegrationTests
                 MockMvcResultMatchers.jsonPath("$.name").value(testAuthorEntityB.getName())
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.age").value(testAuthorEntityB.getAge())
+        );
+    }
+
+
+    //  PATCH - Partial Update Tests    //
+    @Test
+    public void testThatPartialUpdateAuthorReturnsHttp200() throws Exception
+    {
+        AuthorEntity testAuthorEntity = TestDataUtil.createTestAuthorEntityA();
+        AuthorEntity savedTestAuthorEntity = this.authorService.saveAuthor(testAuthorEntity);
+
+        AuthorDto testAuthorDto = TestDataUtil.createTestAuthorDtoA();
+        testAuthorDto.setName("UPDATED");
+        String testAuthorJson = this.objectMapper.writeValueAsString(testAuthorDto);
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.patch("/authors/" + savedTestAuthorEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(testAuthorJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    /*  Testing that the author is fully updated with correct values  */
+    @Test
+    public void testThatPartialUpdateAuthorUpdatesExistingAuthor() throws Exception
+    {
+        AuthorEntity testAuthorEntity = TestDataUtil.createTestAuthorEntityA();
+        AuthorEntity savedTestAuthorEntity = this.authorService.saveAuthor(testAuthorEntity);
+
+        AuthorDto testAuthorDto = TestDataUtil.createTestAuthorDtoA();
+        testAuthorDto.setName("UPDATED");
+        String authorDtoJson = this.objectMapper.writeValueAsString(testAuthorDto);
+
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.patch("/authors/" + savedTestAuthorEntity.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(authorDtoJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedTestAuthorEntity.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value(testAuthorDto.getName())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.age").value(savedTestAuthorEntity.getAge())
         );
     }
 }

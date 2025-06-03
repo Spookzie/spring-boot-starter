@@ -36,15 +36,23 @@ public class BookController
     * We use PUT instead of POST because we want to specify the id (isbn in this case) ourselves
     ************************************************/
     @PutMapping(path = "/books/{isbn}")
-    public ResponseEntity<BookDto> createBook(
-            @PathVariable("isbn") String isbn,
-            @RequestBody BookDto book_dto)
+    public ResponseEntity<BookDto> createUpdateBook(@PathVariable("isbn") String isbn, @RequestBody BookDto book_dto)
     {
         BookEntity bookEntity = this.bookMapper.mapFrom(book_dto);
-        BookEntity savedBookEntity = this.bookService.createBook(isbn, bookEntity); // Saving (Creating) the Entity
+
+        boolean bookExists = this.bookService.doesExist(isbn);
+
+        BookEntity savedBookEntity = this.bookService.createUpdateBook(isbn, bookEntity); // Saving (Creating) the Entity
         BookDto savedBookDto = this.bookMapper.mapTo(savedBookEntity);
 
-        return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);  // Returning the updated info to client with status 201
+        if(bookExists)
+        {
+            return new ResponseEntity<>(savedBookDto, HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<>(savedBookDto, HttpStatus.CREATED);  // Returning the updated info to client with status 20
+        }
     }
 
 

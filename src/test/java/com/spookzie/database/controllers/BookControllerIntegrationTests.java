@@ -3,7 +3,6 @@ package com.spookzie.database.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spookzie.database.TestDataUtil;
 import com.spookzie.database.domain.dto.BookDto;
-import com.spookzie.database.domain.entities.AuthorEntity;
 import com.spookzie.database.domain.entities.BookEntity;
 import com.spookzie.database.services.BookService;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.awt.print.Book;
 
 
 @SpringBootTest
@@ -39,7 +40,7 @@ public class BookControllerIntegrationTests
     }
 
 
-    //  PUT - Create Tests  //
+    //  PUT - Create Tests (Update Tests are later) //
     @Test
     public void testThatCreateBookReturnsHttp201() throws Exception
     {
@@ -57,7 +58,7 @@ public class BookControllerIntegrationTests
 
     /*  Testing that the book is posted with correct values */
     @Test
-    public void testThatCreateBookReturnsSavedBook() throws Exception
+    public void testThatCreateBookReturnsSavedUpdateBook() throws Exception
     {
         BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
         String bookJson = this.objectMapper.writeValueAsString(testBookDto);
@@ -67,9 +68,9 @@ public class BookControllerIntegrationTests
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(bookJson)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.isbn").value(testBookDto.getIsbn())
+                MockMvcResultMatchers.jsonPath("$.isbn").value("978-1-2345-6789-0")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.title").value(testBookDto.getTitle())
+                MockMvcResultMatchers.jsonPath("$.title").value("The Shadow in the Attic")
         );
     }
 
@@ -91,15 +92,15 @@ public class BookControllerIntegrationTests
     public void testThatListBooksReturnsListOfBooks() throws Exception
     {
         BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
-        this.bookService.createBook(testBookEntity.getIsbn(), testBookEntity);
+        this.bookService.createUpdateBook(testBookEntity.getIsbn(), testBookEntity);
 
         this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/books")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].isbn").value(testBookEntity.getIsbn())
+                MockMvcResultMatchers.jsonPath("$[0].isbn").value("978-1-2345-6789-0")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].title").value(testBookEntity.getTitle())
+                MockMvcResultMatchers.jsonPath("$[0].title").value("The Shadow in the Attic")
         );
     }
 
@@ -109,7 +110,7 @@ public class BookControllerIntegrationTests
     public void testThatGetBookReturnsHttp200WhenBookExists() throws Exception
     {
         BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
-        this.bookService.createBook(testBookEntity.getIsbn(), testBookEntity);
+        this.bookService.createUpdateBook(testBookEntity.getIsbn(), testBookEntity);
 
         this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/books/" + testBookEntity.getIsbn())
@@ -137,16 +138,60 @@ public class BookControllerIntegrationTests
     public void testThatGetBookReturnsBookWhenExists() throws Exception
     {
         BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
-        this.bookService.createBook(testBookEntity.getIsbn(), testBookEntity);
+        this.bookService.createUpdateBook(testBookEntity.getIsbn(), testBookEntity);
 
 
         this.mockMvc.perform(
                 MockMvcRequestBuilders.get("/books/" + testBookEntity.getIsbn())
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.isbn").value(testBookEntity.getIsbn())
+                MockMvcResultMatchers.jsonPath("$.isbn").value("978-1-2345-6789-0")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.title").value(testBookEntity.getTitle())
+                MockMvcResultMatchers.jsonPath("$.title").value("The Shadow in the Attic")
+        );
+    }
+
+
+    //  PUT - Update Tests  //
+    @Test
+    public void testThatUpdateBookReturnsHttp200() throws Exception
+    {
+        BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
+        BookEntity savedTestBookEntity = this.bookService.createUpdateBook(testBookEntity.getIsbn(), testBookEntity);
+
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
+        testBookDto.setIsbn(savedTestBookEntity.getIsbn());
+        String testBookJson = this.objectMapper.writeValueAsString(testBookDto);
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.put("/books/" + testBookDto.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(testBookJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    /*  Testing that the book is updated with correct values */
+    @Test
+    public void testThatUpdateBookReturnsSavedUpdateBook() throws Exception
+    {
+        BookEntity testBookEntity = TestDataUtil.createTestBookEntityA(null);
+        BookEntity savedTestBookEntity = this.bookService.createUpdateBook(testBookEntity.getIsbn(), testBookEntity);
+
+        BookDto testBookDto = TestDataUtil.createTestBookDtoA(null);
+        testBookDto.setIsbn(savedTestBookEntity.getIsbn());
+        testBookDto.setTitle("UPDATED");
+        String testBookJson = this.objectMapper.writeValueAsString(testBookDto);
+
+        this.mockMvc.perform(
+                MockMvcRequestBuilders.put("/books/" + testBookDto.getIsbn())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(testBookJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.isbn").value("978-1-2345-6789-0")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.title").value("UPDATED")
         );
     }
 }
