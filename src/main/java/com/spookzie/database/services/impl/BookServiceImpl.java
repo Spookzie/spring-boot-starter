@@ -3,6 +3,8 @@ package com.spookzie.database.services.impl;
 import com.spookzie.database.domain.entities.BookEntity;
 import com.spookzie.database.repositories.BookRepository;
 import com.spookzie.database.services.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,6 +47,13 @@ public class BookServiceImpl implements BookService
                         this.bookRepository.findAll().spliterator(),
                         false)
                 .collect(Collectors.toList());
+    }
+
+    // Find All with pagination
+    @Override
+    public Page<BookEntity> findAll(Pageable pageable)
+    {
+        return this.bookRepository.findAll(pageable);
     }
 
 

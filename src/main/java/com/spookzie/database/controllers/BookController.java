@@ -4,6 +4,8 @@ import com.spookzie.database.domain.dto.BookDto;
 import com.spookzie.database.domain.entities.BookEntity;
 import com.spookzie.database.mappers.Mapper;
 import com.spookzie.database.services.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,13 +56,10 @@ public class BookController
 
     // GET - Read Many
     @GetMapping(path = "/books")
-    public List<BookDto> listBooks()
+    public Page<BookDto> listBooks(Pageable pageable)
     {
-        List<BookEntity> books = this.bookService.findAll();
-
-        return books.stream()
-                .map(this.bookMapper::mapTo)
-                .collect(Collectors.toList());
+        Page<BookEntity> books = this.bookService.findAll(pageable);
+        return books.map(this.bookMapper::mapTo);
     }
 
 
