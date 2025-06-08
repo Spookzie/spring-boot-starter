@@ -5,8 +5,10 @@ import com.spookzie.database.domain.entities.AuthorEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -15,9 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 /*  Unit Tests  */
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@DataJpaTest
 public class AuthorRepositoryIntegrationTests
 {
     private final AuthorRepository authorRepo;
@@ -63,7 +63,8 @@ public class AuthorRepositoryIntegrationTests
     @Test
     public void testThatAuthorCanBeUpdated()
     {
-        AuthorEntity testAuthorEntityA = this.authorRepo.save(TestDataUtil.createTestAuthorEntityA());
+        AuthorEntity testAuthorEntityA = TestDataUtil.createTestAuthorEntityA();
+        this.authorRepo.save(testAuthorEntityA);
 
         testAuthorEntityA.setName("UPDATED"); // Changing author's name
         this.authorRepo.save(testAuthorEntityA);    // Updating the author
